@@ -229,10 +229,7 @@ module CanCan
     end
 
     def strong_parameters?
-      klass = ActionController.const_get 'Parameters'
-      return klass.is_a?(Class)
-    rescue
-      return false
+      @params.class.name == 'ActionController::Parameters'
     end
 
     def resource_params
