@@ -96,7 +96,7 @@ describe CanCan::ControllerResource do
   end
 
   it "overrides initial attributes with params" do
-    @params.merge!(:action => "new", :project => {:name => "from params"})
+    @params.merge!(:action => "create", :project => {:name => "from params"})
     @ability.can(:create, :projects, :name => "from conditions")
     CanCan::ControllerResource.new(@controller, :load => true).process
     @controller.instance_variable_get(:@project).name.should == "from params"
@@ -465,22 +465,6 @@ describe CanCan::ControllerResource do
     @controller.authorize!(:index, "admin/dashboard")
     resource = CanCan::ControllerResource.new(@controller, :authorize => true).process
     lambda { resource.process }.should_not raise_error(CanCan::Unauthorized)
-  end
-  
-  it "should attempt pre-processing by default if strong_parameters are used" do
-    class ActionController
-      class Parameters < HashWithIndifferentAccess
-      end
-    end
-
-    @params.merge!(:action => "create")
-    @controller.class.send(:define_method, :project_params) do { :name => 'foobar'} end
-    CanCan::ControllerResource.new(@controller, :load => true).process
-    @controller.instance_variable_get(:@project).name.should == "foobar"
-  
-    class ActionController
-      remove_const :Parameters
-    end
   end
 
   it "should allow controller methods for parameter pre-processing" do

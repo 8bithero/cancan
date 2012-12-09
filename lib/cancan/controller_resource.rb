@@ -234,7 +234,7 @@ module CanCan
 
     def resource_params
       if [:create, :update].member? @params[:action].to_sym
-        param_name = (@options[:class] || namespaced_name).to_s.underscore.gsub('/', '_')
+        param_name = @options[:instance_name] || (@options[:class] || namespaced_name).to_s.underscore.gsub('/', '_')
         if strong_parameters? || @options[:params]
           params_method = (@options[:params] == true || ! @options[:params]) ?
             "#{param_name}_params" : @options[:params]
